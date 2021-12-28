@@ -9,3 +9,7 @@ npm install
 ```
 npm run serve
 ```
+### API地址
+```
+http://toutiao-app.itheima.net/v1_0/channels
+```
