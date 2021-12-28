@@ -13,3 +13,43 @@ npm run serve
 ```
 http://toutiao-app.itheima.net/v1_0/channels
 ```
+### 移动端 REM 适配 postcss-pxtorem/lib-flexible
+```
+Vant 中的样式默认使用 px 作为单位，如果需要使用 rem 单位，推荐使用以下两个工具：
+- postcss-pxtorem 是一款 postcss 插件，用于将单位转化为 rem
+- lib-flexible 用于设置 rem 基准值
+
+一、使用 lib-flexible 动态设置 REM 基准值（html 标签的字体大小）
+1、安装：npm i amfe-flexible
+2、然后在 main.js 中加载执行该模块
+import 'amfe-flexible'
+
+二、使用 postcss-pxtorem 将 px 转为 rem。（注意：该插件不能转换行内样式中的 px，例如 <div style="width: 200px;"></div>）
+1、安装：npm i postcss-pxtorem@5.1.1
+2、然后在项目根目录中创建 .postcssrc.js 文件，配置PostCSS
+/**
+ * PostCSS 配置文件
+ */
+module.exports = {
+  // 配置要使用的 PostCSS 插件
+  plugins: {
+    // 配置使用 autoprefixer 插件
+    // 作用：生成浏览器 CSS 样式规则前缀
+    // VueCLI 内部已经配置了 autoprefixer 插件
+    // 所以又配置了一次，所以产生冲突了
+    // 'autoprefixer': { // autoprefixer 插件的配置
+    //   // 配置要兼容到的环境信息
+    //   browsers: ['Android >= 4.0', 'iOS >= 8']
+    // },
+
+    // 配置使用 postcss-pxtorem 插件
+    // 作用：把 px 转为 rem
+    'postcss-pxtorem': {
+      rootValue ({ file }) {
+        return file.indexOf('vant') !== -1 ? 37.5 : 75
+      },
+      propList: ['*']
+    }
+  }
+}
+```
