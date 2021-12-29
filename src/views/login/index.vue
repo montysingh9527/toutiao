@@ -42,8 +42,8 @@ export default {
   data() {
     return {
       user: {
-        mobile: '', // 手机号
-        code: '', // 验证码
+        mobile: '13611111111', // 手机号
+        code: '246810', // 验证码
       },
     };
   },
@@ -55,15 +55,23 @@ export default {
       // 1、获取表单数据
       const user = this.user;
       // 2、表单验证
+
+    //   在组件中必须通过this.$toast 来调用Toast组件
+    this.$toast.loading({
+        message: '登录中...',
+        forbidClick: true,   // 禁用背景点击
+        duration: 2000  // 持续时间,默认是2000。如果是0则持续展示
+    });
       // 3、提交表单请求登录
       try {
         const res = await login(user);
         console.log("登录成功", res);
+        this.$toast.success('登录成功');
       } catch (err) {
         if (err.response.status === 400) {
-          console.log("手机号或验证码错误");
+          this.$toast.fail('手机号或验证码错误');
         } else {
-          console.log("登录失败", err);
+          this.$toast.fail('登录失败,请稍后再试');
         }
       }
       // 4、根据请求响应结果处理后续操作

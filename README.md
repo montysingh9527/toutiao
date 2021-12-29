@@ -53,3 +53,19 @@ module.exports = {
   }
 }
 ```
+
+### Toast 轻提示组件
+```
+引入 Toast 组件后，会自动在 Vue 的 prototype 上挂载 $toast 方法，便于在组件内调用。
+
+在组件中必须通过this.$toast 来调用Toast组件
+    this.$toast.loading({
+        message: '登录中...',
+        forbidClick: true,   // 禁用背景点击
+        duration: 2000  // 持续时间,默认是2000。如果是0则持续展示
+    });
+Toast 默认采用单例模式，即同一时间只会存在一个 Toast
+this.$toast.success('登录成功');
+this.$toast.fail('登录失败,请稍后再试');
+```
+
