@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import { login } from '@/api/user';
+import { login, sendSms } from '@/api/user';
 export default {
   name: 'LoginIndex',
   components: {},
@@ -115,7 +115,20 @@ export default {
         }
         // 2、验证通过，显示倒计时
         this.isCountDownShow = true
-        // 3、请求发送验证码
+        // 3、请求发送验证码 
+        sendSms(this.user.mobile).then(res=>{
+            console.log('验证码res',res)
+            this.$toast('发送验证码成功')
+        }).catch(err=>{
+            // 发送失败，关闭倒计时
+            this.isCountDownShow = false
+            if(err.response.status === 404){
+                this.$toast('手机号码不正确')
+            }else{
+                this.$toast('429发送次数受限,请稍后再试')
+            }
+            console.log('验证码err',err.response.status)
+        })
     }
   },
 };
