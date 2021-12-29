@@ -93,6 +93,8 @@ export default {
       // 3、提交表单请求登录
       try {
         const res = await login(user);
+        // 将提交登录数据存储到Vuex中，这里存储用户数据
+        this.$store.commit('setUser',res.data.data)
         console.log("登录成功", res);
         this.$toast.success('登录成功');
       } catch (err) {
