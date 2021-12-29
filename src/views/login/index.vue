@@ -1,10 +1,10 @@
 <template>
   <div class="login-container">
     <van-nav-bar class="page-nav-bar" title="登录" />
-    <van-form @submit="onSubmit">
+    <van-form ref="loginForm" @submit="onSubmit">
       <van-field
         v-model="user.mobile"
-        name="手机号"
+        name="mobile"
         placeholder="请输入手机号"
         left-icon="smile-o"
         :rules="userFormRules.mobile"
@@ -15,7 +15,7 @@
       </van-field>
       <van-field
         v-model="user.code"
-        name="验证码"
+        name="code"
         placeholder="请输入验证码"
         :rules="userFormRules.code"
         type="number"
@@ -23,7 +23,13 @@
       >
         <i slot="left-icon" class="toutiao toutiao-yanzhengma"></i>
         <template #button>
-          <van-button class="send-sms-code" round size="small" type="default"
+            <!-- time倒计时 CountDown -->
+            <van-count-down v-if="isCountDownShow"
+                :time="1000 * 6" format="ss s"
+                @finish="isCountDownShow = false"/>
+          <van-button v-else class="send-sms-code" round size="small" type="default" 
+          native-type="button"
+           @click="onSendSms" 
             >发送验证码</van-button
           >
         </template>
@@ -65,7 +71,8 @@ export default {
               pattern: /^\d{6}$/,
               message: '验证码格式错误'
           }],
-      }
+      },
+      isCountDownShow: false    // 是否展示验证码倒计时
     };
   },
   computed: {},
@@ -97,6 +104,19 @@ export default {
       }
       // 4、根据请求响应结果处理后续操作
     },
+    // 发送验证码
+    async onSendSms(){
+        // 1、校验手机号
+        try{
+           await this.$refs.loginForm.validate('mobile')
+        }catch(err){
+            this.$toast.fail('手机号码输入错误');
+            return
+        }
+        // 2、验证通过，显示倒计时
+        this.isCountDownShow = true
+        // 3、请求发送验证码
+    }
   },
 };
 </script>
