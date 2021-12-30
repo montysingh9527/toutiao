@@ -1,6 +1,6 @@
 <template>
   <div class="login-container">
-    <van-nav-bar class="page-nav-bar" title="登录" />
+    <van-nav-bar class="page-nav-bar" title="登录" left-arrow @click-left="$router.back()"></van-nav-bar>
     <van-form ref="loginForm" @submit="onSubmit">
       <van-field
         v-model="user.mobile"
