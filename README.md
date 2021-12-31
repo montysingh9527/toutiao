@@ -67,6 +67,7 @@ module.exports = {
 Toast 默认采用单例模式，即同一时间只会存在一个 Toast
 this.$toast.success('登录成功');
 this.$toast.fail('登录失败,请稍后再试');
+this.$toast('登录成功');
 ```
 
 ### 

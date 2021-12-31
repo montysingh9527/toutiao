@@ -39,6 +39,8 @@
           >登录</van-button
         >
       </div>
+      <van-divider>账号：13611111111 密码：246810</van-divider>
+      <van-divider>如果收不到验证码，请使用万能验证码：246810</van-divider>
     </van-form>
   </div>
 </template>
@@ -97,6 +99,8 @@ export default {
         this.$store.commit('setUser',res.data.data)
         console.log("登录成功", res);
         this.$toast.success('登录成功');
+        // 登录成功,跳转回原来的页面。back()的方式不严谨
+        this.$router.back()
       } catch (err) {
         if (err.response.status === 400) {
           this.$toast.fail('手机号或验证码错误');

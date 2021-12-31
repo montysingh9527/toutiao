@@ -1,6 +1,6 @@
 <template>
   <div class="my-container">
-    <div class="header not-login" >
+    <div v-if="!user" class="header not-login" >
       <div class="login-btn" @click="$router.push('/login')">
         <img class="mobile-img" src="~@/assets/mobile.png" alt="">
         <span class="text">登录|注册</span>
@@ -8,7 +8,7 @@
     </div>
 
     <!-- 已登录状态布局 -->
-    <div class="header user-info">
+    <div v-if="user" class="header user-info">
       <div class="base-info">
         <div class="left">
             <van-image class="avatar" src="https://img01.yzcdn.cn/vant/cat.jpeg" fit="cover" round />
@@ -51,11 +51,12 @@
     <!-- 消息通知、小智同学、退出登录 -->
     <van-cell title="消息通知" is-link />
     <van-cell title="小智同学" class="md9" is-link />
-    <van-cell title="退出登录" class="lgout-cell" />
+    <van-cell v-if="user" title="退出登录" class="lgout-cell" />
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: "MyIndex",
   components: {},
@@ -63,7 +64,9 @@ export default {
   data() {
     return {};
   },
-  computed: {},
+  computed: {
+    ...mapState(['user'])
+  },
   watch: {},
   created() {},
   methods: {},
