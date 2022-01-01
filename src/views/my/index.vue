@@ -51,7 +51,7 @@
     <!-- 消息通知、小智同学、退出登录 -->
     <van-cell title="消息通知" is-link />
     <van-cell title="小智同学" class="md9" is-link />
-    <van-cell v-if="user" title="退出登录" class="lgout-cell" />
+    <van-cell @click="onLogout" v-if="user" title="退出登录" class="lgout-cell" />
   </div>
 </template>
 
@@ -69,7 +69,20 @@ export default {
   },
   watch: {},
   created() {},
-  methods: {},
+  methods: {
+    onLogout(){
+      // 退出登录提示
+      this.$dialog.confirm({
+        title: '确认退出吗？',
+        }).then(() => {
+          // 确认退出：清除登录状态(vuex容器中的user + localStorage本地存储的user)
+          this.$store.commit('setUser', null)
+        })
+        .catch(() => {
+          console.log('取消')
+        });
+    }
+  },
 };
 </script>
 
