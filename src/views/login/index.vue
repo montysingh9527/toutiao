@@ -63,7 +63,7 @@ export default {
               required: true,
               message: '手机号不能为空'
           },{
-              pattern: /^1[2|3|4|5|8|9]\d{9}$/,
+              pattern: /^1[2|3|4|5|7|8|9]\d{9}$/,
               message: '手机号格式错误'
           }],
           code: [{

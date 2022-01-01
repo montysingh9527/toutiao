@@ -11,7 +11,7 @@
     <div v-if="user" class="header user-info">
       <div class="base-info">
         <div class="left">
-            <van-image class="avatar" src="https://img01.yzcdn.cn/vant/cat.jpeg" fit="cover" round />
+            <van-image class="avatar" :src="userInfo.photo" fit="cover" round />
             <span class="name">今日头条号</span>
         </div>
         <div class="right">
@@ -20,19 +20,19 @@
       </div>
       <div class="data-stats">
         <div class="data-item">
-          <span class="count">10</span>
+          <span class="count">{{ userInfo.art_count }}</span>
           <span class="text">头条</span>
         </div>
         <div class="data-item">
-          <span class="count">10</span>
+          <span class="count">{{ userInfo.follow_count }}</span>
           <span class="text">关注</span>
         </div>
         <div class="data-item">
-          <span class="count">10</span>
+          <span class="count">{{ userInfo.fans_count }}</span>
           <span class="text">粉丝</span>
         </div>
         <div class="data-item">
-          <span class="count">10</span>
+          <span class="count">{{ userInfo.like_count }}</span>
           <span class="text">获赞</span>
         </div>
       </div>
@@ -57,18 +57,26 @@
 
 <script>
 import { mapState } from 'vuex'
+import { getUserInfo } from '@/api/user'
 export default {
   name: "MyIndex",
   components: {},
   props: {},
   data() {
-    return {};
+    return {
+      userInfo: {}  // 用户信息
+    };
   },
   computed: {
     ...mapState(['user'])
   },
   watch: {},
-  created() {},
+  created() {
+    // 如果用户登录了,则请求用户信息
+    if(this.user){
+      this.loadUserInfo()
+    }
+  },
   methods: {
     onLogout(){
       // 退出登录提示
@@ -81,6 +89,15 @@ export default {
         .catch(() => {
           console.log('取消')
         });
+    },
+    async loadUserInfo(){
+      try{
+        const { data } = await getUserInfo()
+        this.userInfo = data.data
+        console.log('user',this.userInfo)
+      } catch (err){
+        this.$toast('获取用户数据失败')
+      }
     }
   },
 };
