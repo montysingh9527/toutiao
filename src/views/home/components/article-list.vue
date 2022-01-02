@@ -101,5 +101,12 @@ methods: {
 </script>
 
 <style scoped lang="less">
+.article-list {
+    // 百分比单位是相对于父元素的
+    //height: 100%;
+    // vh视口单位,不受父元素影响。1vh = 可视窗口高度的百分之一 
+    height: 79vh;
+    overflow: auto;
 
+}
 </style>
