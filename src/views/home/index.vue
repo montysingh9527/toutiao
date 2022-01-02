@@ -1,7 +1,7 @@
 <template>
   <div class="home-container">
     <!-- 导航栏 -->
-    <van-nav-bar class="page-nav-bar">
+    <van-nav-bar class="page-nav-bar" fixed>
       <van-button class="search-btn" slot="title" type="info" size="small" icon="search" round>搜索</van-button>
     </van-nav-bar>
     
@@ -55,6 +55,7 @@ export default {
 
 <style scoped lang="less">
 .home-container {
+  padding-top: 174px;
   padding-bottom: 100px;
   // 要想改变组件自带的样式属性，添加 /deep/
   /deep/.van-nav-bar__title {
@@ -76,7 +77,12 @@ export default {
   }
   // /deep/ 深度操作符
   /deep/ .channel-tabs {
-    .van-tabs_wrap {
+    .van-tabs__wrap {
+      position: fixed;
+      top: 92px;
+      z-index: 1;
+      left: 0;
+      right: 0;
       height: 82px;
     }
     .van-tab {
