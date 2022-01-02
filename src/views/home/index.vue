@@ -8,7 +8,10 @@
     <!-- 频道列表 -->
     <!-- 通过 animated 属性可以开启切换标签内容时的转场动画，通过 swipeable 属性可以开启滑动切换标签页。-->
     <van-tabs class="channel-tabs" v-model="active" animated swipeable>
-      <van-tab :title="channels.name" v-for="channels in channelsList" :key="channels.id">{{ channels.name + channels.id}}</van-tab>
+      <van-tab :title="channels.name" v-for="channels in channelsList" :key="channels.id">
+        <!-- 文章列表组件 -->
+        <article-list :channel="channels"/>
+      </van-tab>
       <!-- 添加占位符充当内容区域：解决滑动到最后更多图标遮挡文字 -->
       <div slot="nav-right" class="placeholder"></div>
       <div slot="nav-right" class="hamburger-btn">
@@ -20,9 +23,12 @@
 
 <script>
 import { getUserChannels } from '@/api/user'
+import ArticleList from './components/article-list'
 export default {
   name: "HomeIndex",
-  components: {},
+  components: {
+    ArticleList
+  },
   props: {},
   data() {
     return {
@@ -49,6 +55,7 @@ export default {
 
 <style scoped lang="less">
 .home-container {
+  padding-bottom: 100px;
   // 要想改变组件自带的样式属性，添加 /deep/
   /deep/.van-nav-bar__title {
       max-width: unset;
