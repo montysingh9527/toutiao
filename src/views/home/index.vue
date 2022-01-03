@@ -14,26 +14,36 @@
       </van-tab>
       <!-- 添加占位符充当内容区域：解决滑动到最后更多图标遮挡文字 -->
       <div slot="nav-right" class="placeholder"></div>
-      <div slot="nav-right" class="hamburger-btn">
+      <div slot="nav-right" class="hamburger-btn" @click="isChannelEditShow = true">
         <i class="toutiao toutiao-gengduo"></i>
       </div>
     </van-tabs>
+
+    <!-- 频道编辑弹出层 -->
+    <van-popup v-model="isChannelEditShow"
+     closeable position="bottom" 
+     :style="{height: '100%'}">
+     <channel-edit></channel-edit>
+     </van-popup>
   </div>
 </template>
 
 <script>
 import { getUserChannels } from '@/api/user'
 import ArticleList from './components/article-list'
+import ChannelEdit from './components/channel-edit'
 export default {
   name: "HomeIndex",
   components: {
-    ArticleList
+    ArticleList,
+    ChannelEdit
   },
   props: {},
   data() {
     return {
       active: 0,  // 激活的标签项，其实就是索引
-      channelsList: [] // 频道数据
+      channelsList: [], // 频道数据
+      isChannelEditShow: false   // 控制编辑弹出层展示
     };
   },
   computed: {},
