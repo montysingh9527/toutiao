@@ -12,7 +12,7 @@
               <div class="label-info-wrap">
                   <span>{{ article.aut_name }}</span>
                   <span>{{ article.comm_count }}评论</span>
-                  <span>{{ article.pubdate }}</span>
+                  <span>{{ article.pubdate | formDate }}</span>
               </div>
           </div>  
         <!-- 一个图片侧边展示 -->

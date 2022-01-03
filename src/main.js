@@ -6,6 +6,7 @@ import './styles/index.less' // 全局加载样式
 import Vant from 'vant';
 import 'vant/lib/index.css';
 import 'amfe-flexible' // css px适配rem
+import './utils/dayjs'   // 处理时间格式dayjs
 
 Vue.use(Vant);
 
