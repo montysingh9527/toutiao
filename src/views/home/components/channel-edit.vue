@@ -4,10 +4,12 @@
         <!-- 我的频道 -->
         <van-cell :border="false">
             <div slot="title" class="title-text">我的频道</div>
-            <van-button class="edit-btn" type="danger" size="mini" round plain>编辑</van-button>
+            <van-button @click="isEdit = !isEdit" class="edit-btn" type="danger" size="mini" round plain>{{ isEdit ? '完成':'编辑' }}</van-button>
         </van-cell>
         <van-grid class="my-grid" :gutter="10">            
-            <van-grid-item class="grid-item" v-for="channels in channelsEdit" :key="channels.id" icon="clear">
+            <van-grid-item class="grid-item" v-for="channels in channelsEdit" :key="channels.id">
+                <!-- 使用includes方法判断数组中是否包含0 -->
+                <van-icon v-show="isEdit && !fiexChannels.includes(channels.id)" slot="icon" name="clear"></van-icon>
                 <!-- v-bind:class语法：一个对象,对象中key表示要作用的css类名,对象中的value要计算出布尔值。true则作用该类名 -->
                 <span class="text" :class="{ active: channels.id === activeId }" slot="text">{{ channels.name }}</span>
             </van-grid-item>
@@ -18,7 +20,7 @@
             <div slot="title" class="title-text">频道推荐</div>
         </van-cell>
         <van-grid class="tui-grid" :gutter="10">
-            <van-grid-item class="grid-item" v-for="(channel, index) in tuiChannels" :key="index" icon="plus" :text="channel.name" />
+            <van-grid-item @click="onAddChannel(channel)" class="grid-item" v-for="(channel, index) in tuiChannels" :key="index" icon="plus" :text="channel.name" />
         </van-grid>
     </div>
 </template>
@@ -40,11 +42,13 @@ export default {
   },
   data() {
     return {
-        allChannels: []    // 所有频道列表
+        allChannels: [],    // 所有频道列表
+        isEdit: false,    // 控制编辑状态是否显示 X 号
+        fiexChannels: [0]   // 固定频道不允许删除
     };
   },
   computed: {
-      // 推荐频道 简写方法一
+      // 推荐频道 简写方法一: 计算属性会监测内部数据变化,如果数据发生变化,则会重新执行
       tuiChannels(){
           // filter数组方法：遍历数组,把符合条件的元素存储到新数组中并返回
           return this.allChannels.filter(channel => {
@@ -83,6 +87,10 @@ export default {
           }).catch((err)=>{
             this.$toast('获取频道数据失败!',err)
           })
+      },
+      // 添加频道：从频道推荐中,添加至我的频道中
+      onAddChannel(channel) {
+          this.channelsEdit.push(channel)
       }      
   },
 };
@@ -127,6 +135,9 @@ export default {
                 font-size: 30px;
                 color: #cacaca;
                 z-index: 2;
+            }
+            .van-grid-item__icon-wrapper {
+                position: unset;
             }
         }
     }
