@@ -6,8 +6,11 @@
             <div slot="title" class="title-text">我的频道</div>
             <van-button class="edit-btn" type="danger" size="mini" round plain>编辑</van-button>
         </van-cell>
-        <van-grid class="my-grid" :gutter="10">
-            <van-grid-item class="grid-item" v-for="value in 8" :key="value" icon="clear" text="文字" />
+        <van-grid class="my-grid" :gutter="10">            
+            <van-grid-item class="grid-item" v-for="channels in channelsEdit" :key="channels.id" icon="clear">
+                <!-- v-bind:class语法：一个对象,对象中key表示要作用的css类名,对象中的value要计算出布尔值。true则作用该类名 -->
+                <span class="text" :class="{ active: channels.id === activeId }" slot="text">{{ channels.name }}</span>
+            </van-grid-item>
         </van-grid>
 
         <!-- 频道推荐 -->
@@ -24,7 +27,16 @@
 export default {
   name: 'ChannelEdit',
   components: {},
-  props: {},
+  props: {
+      channelsEdit: {
+          type: Array,
+          required: true
+      },
+      activeId: {
+          type: Number,
+          required: true
+      }
+  },
   data() {
     return {};
   },
@@ -52,12 +64,16 @@ export default {
     /deep/.grid-item {
         width: 160px;
         height: 86px;        
-        .van-grid-item__content {
+        .van-grid-item__content,text {
             white-space: nowrap;  
             background-color: #f4f5f6;
+            font-size: 28px;
+            color: #222;           
             .van-grid-item__text {
-                font-size: 28px;
-                color: #222;
+                 margin-top: 0;
+            }
+            .active {
+                color: red;
             }
         }
     }
@@ -82,9 +98,6 @@ export default {
                     margin-right: 6px;
                 }
             }        
-            .van-grid-item__text {
-                margin-top: 0;
-            }
         }            
     }
 }

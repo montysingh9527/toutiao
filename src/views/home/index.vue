@@ -23,7 +23,7 @@
     <van-popup v-model="isChannelEditShow"
      closeable position="bottom" 
      :style="{height: '100%'}">
-     <channel-edit></channel-edit>
+     <channel-edit :channelsEdit="channelsList" :activeId="active"/>
      </van-popup>
   </div>
 </template>
