@@ -18,12 +18,13 @@
             <div slot="title" class="title-text">频道推荐</div>
         </van-cell>
         <van-grid class="tui-grid" :gutter="10">
-            <van-grid-item class="grid-item" v-for="value in 8" :key="value" icon="plus" text="文字" />
+            <van-grid-item class="grid-item" v-for="(channel, index) in tuiChannels" :key="index" icon="plus" :text="channel.name" />
         </van-grid>
     </div>
 </template>
 
 <script>
+import { getAllChannels } from '@/api/channel'
 export default {
   name: 'ChannelEdit',
   components: {},
@@ -38,12 +39,52 @@ export default {
       }
   },
   data() {
-    return {};
+    return {
+        allChannels: []    // 所有频道列表
+    };
   },
-  computed: {},
+  computed: {
+      // 推荐频道 简写方法一
+      tuiChannels(){
+          // filter数组方法：遍历数组,把符合条件的元素存储到新数组中并返回
+          return this.allChannels.filter(channel => {
+              // find数组方法：遍历数组,把符合条件的第一个元素返回
+              return !this.channelsEdit.find(channelEdit => channelEdit.id === channel.id)
+          })
+      }
+      // 推荐频道 详细方法二
+    //   tuiChannels() {
+    //       const channels = []
+    //       // allChannels 所有频道 ，channelsEdit 我的频道
+    //       this.allChannels.forEach(channel => {
+    //           // find遍历数组,找到满足条件的元素项
+    //         const ret = this.channelsEdit.find(channelEdit => {
+    //               return channelEdit.id === channel.id
+    //           })
+    //           // 如果我的频道中不包括该频道项,则收集到推荐频道中
+    //           if(!ret){
+    //               channels.push(channel)
+    //           }
+    //       })
+    //       // 把计算结果返回
+    //       return channels
+    //   }
+  },
   watch: {},
-  created() {},
-  methods: {},
+  created() {
+      this._getAllChannels()
+  },
+  methods: {
+      _getAllChannels(){
+          getAllChannels().then( res=> {
+            const { data } = res.data
+            console.log('所有频道==>',data)
+            this.allChannels = data.channels
+          }).catch((err)=>{
+            this.$toast('获取频道数据失败!',err)
+          })
+      }      
+  },
 };
 </script>
 
