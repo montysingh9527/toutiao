@@ -23,7 +23,7 @@
     <van-popup v-model="isChannelEditShow"
      closeable position="bottom" 
      :style="{height: '100%'}">
-     <channel-edit :channelsEdit="channelsList" :activeId="active"/>
+     <channel-edit :channelsEdit="channelsList" :activeId="active" @update-active="onUpdateActive"/>
      </van-popup>
   </div>
 </template>
@@ -58,6 +58,13 @@ export default {
       }).catch(err=>{
         this.$toast('获取用户频道数据失败',err)
       })
+    },
+    // 接收子组件传递过来的index 和 布尔值
+    onUpdateActive(index, isChannelEditShow = true) {
+      // 更新激活的频道项
+      this.active = index
+      // 是否关闭编辑弹窗，看子组件onMyChannelClick()方法传过来的布尔值
+      this.isChannelEditShow = isChannelEditShow
     }
   },
 };

@@ -7,11 +7,11 @@
             <van-button @click="isEdit = !isEdit" class="edit-btn" type="danger" size="mini" round plain>{{ isEdit ? '完成':'编辑' }}</van-button>
         </van-cell>
         <van-grid class="my-grid" :gutter="10">            
-            <van-grid-item class="grid-item" v-for="channels in channelsEdit" :key="channels.id">
+            <van-grid-item @click="onMyChannelClick(channels, index)" class="grid-item" v-for="(channels, index) in channelsEdit" :key="index">
                 <!-- 使用includes方法判断数组中是否包含0 -->
-                <van-icon v-show="isEdit && !fiexChannels.includes(channels.id)" slot="icon" name="clear"></van-icon>
+                <van-icon v-show="isEdit && !fiexChannels.includes(index)" slot="icon" name="clear"></van-icon>
                 <!-- v-bind:class语法：一个对象,对象中key表示要作用的css类名,对象中的value要计算出布尔值。true则作用该类名 -->
-                <span class="text" :class="{ active: channels.id === activeId }" slot="text">{{ channels.name }}</span>
+                <span class="text" :class="{ active: index === activeId }" slot="text">{{ channels.name }}</span>
             </van-grid-item>
         </van-grid>
 
@@ -91,6 +91,26 @@ export default {
       // 添加频道：从频道推荐中,添加至我的频道中
       onAddChannel(channel) {
           this.channelsEdit.push(channel)
+      },
+      // 切换频道同步至首页
+      onMyChannelClick (channels,index) {
+        //   console.log('index',index)
+          // 1、 如果是固定频道(推荐),则不删除
+          if(this.isEdit){
+              if(this.fiexChannels.includes(channels.id)) {
+                  return this.$toast('推荐项不能删除！')
+              }
+            //2、删除频道： splice方法—参数1:要删除元素的开始索引，参数2:删除的个数,如果不指定,则从参数1开始一直删除
+            this.channelsEdit.splice(index, 1)  
+              // 3、如果删除激活频道之前的频道,则更新激活的频道项
+              if(index <= this.activeId) {
+                  // 让激活频道的索引-1 。将true传递给父组件onUpdateActive()方法,表示不关闭频道弹窗
+                  this.$emit('update-active', this.activeId -1, true)
+              }                          
+          } else {
+              // 非编辑状态,执行切换频道，子组件将index索引传递给父组件onUpdateActive()方法。将false传递给父组件,表示关闭频道弹窗
+              this.$emit('update-active', index, false)
+          }
       }      
   },
 };
