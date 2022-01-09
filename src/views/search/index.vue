@@ -17,7 +17,7 @@
 
     <!-- 联想建议 Start -->
     <!-- searchText如果有输入搜索内容 则展示 -->
-    <search-suggestion v-else-if="searchText" />
+    <search-suggestion v-else-if="searchText" :search-text="searchText" />
     <!-- 联想建议 End -->
 
     <!-- 搜索历史记录 Start -->
