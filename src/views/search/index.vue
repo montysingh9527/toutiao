@@ -5,22 +5,24 @@
         <form action="/">
             <van-search v-model="searchText" show-action
                 background="#5babfb" placeholder="请输入搜索关键词"
-                @search="onSearch"  @cancel="onCancel">
+                @search="onSearch"  @cancel="onCancel" @focus="isResultShow = false">
             </van-search>
         </form>
     <!-- 搜索栏 End -->
 
-    <!-- 搜索历史记录 Start -->
-    <search-history />
-    <!-- 搜索历史记录 End -->
+    <!-- 搜索结果 Start -->
+    <!-- isResultShow如果有搜索结果 则展示 -->
+    <search-result v-if="isResultShow" />
+    <!-- 搜索结果 End -->
 
     <!-- 联想建议 Start -->
-    <search-suggestion />
+    <!-- searchText如果有输入搜索内容 则展示 -->
+    <search-suggestion v-else-if="searchText" />
     <!-- 联想建议 End -->
 
-    <!-- 历史记录 Start -->
-    <search-result />
-    <!-- 历史记录 End -->
+    <!-- 搜索历史记录 Start -->
+    <search-history v-else />
+    <!-- 搜索历史记录 End -->
 
   </div>
 </template>
@@ -39,7 +41,8 @@ export default {
   props: {},
   data() {
     return {
-        searchText:''
+        searchText:'',   // 搜索文字
+        isResultShow: false    // 控制搜索结果的展示
     };
   },
   computed: {},
@@ -47,6 +50,7 @@ export default {
   created() {},
   methods: {
     onSearch(val) {
+        this.isResultShow = true  // 展示搜索结果
       console.log(val);
     },
     onCancel() {
