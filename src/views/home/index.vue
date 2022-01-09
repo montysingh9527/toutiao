@@ -32,6 +32,8 @@
 import { getUserChannels } from '@/api/user'
 import ArticleList from './components/article-list'
 import ChannelEdit from './components/channel-edit'
+import { getItem } from '@/utils/storage'
+import { mapState } from 'vuex'
 export default {
   name: "HomeIndex",
   components: {
@@ -46,19 +48,38 @@ export default {
       isChannelEditShow: false   // 控制编辑弹出层展示
     };
   },
-  computed: {},
+  computed: {
+    ...mapState(['user'])
+  },
   watch: {},
   created() {
     this._getUserChannels()
   },
   methods: {
-    _getUserChannels() {
-      getUserChannels().then(res=>{
-        this.channelsList =  res.data.data.channels
-      }).catch(err=>{
-        this.$toast('获取用户频道数据失败',err)
-      })
-    },
+   async _getUserChannels() {
+    try {
+      let channels = []
+      if(this.user) {
+        // 已登录,请求获取用户频道列表
+        const { data } = await getUserChannels()
+        channels = data.data.channels
+      } else {
+        // 未登录,判断是否有本地的频道列表数据
+        const localChannels = getItem('TOUTIAO_CHANNELS')
+        // 有,拿来使用
+        if(localChannels) {
+          channels = localChannels 
+        } else {
+          // 没有,请求获取默认频道列表
+          const { data } = await getUserChannels()
+          channels = data.data.channels
+        }
+      }
+      this.channelsList = channels
+    }catch(err) {
+      this.$toast('获取频道数据失败')
+    }
+  },
     // 接收子组件传递过来的index 和 布尔值
     onUpdateActive(index, isChannelEditShow = true) {
       // 更新激活的频道项

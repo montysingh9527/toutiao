@@ -9,10 +9,6 @@ npm install
 ```
 npm run serve
 ```
-### API地址
-```
-http://toutiao-app.itheima.net/v1_0/channels
-```
 ### 移动端 REM 适配 postcss-pxtorem/lib-flexible
 ```
 Vant 中的样式默认使用 px 作为单位，如果需要使用 rem 单位，推荐使用以下两个工具：

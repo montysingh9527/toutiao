@@ -26,7 +26,9 @@
 </template>
 
 <script>
-import { getAllChannels } from '@/api/channel'
+import { getAllChannels, addUserChannel, deleteUserChannel } from '@/api/channel'
+import { mapState } from 'vuex';
+import { setItem } from '@/utils/storage'
 export default {
   name: 'ChannelEdit',
   components: {},
@@ -48,6 +50,7 @@ export default {
     };
   },
   computed: {
+      ...mapState(['user']),
       // 推荐频道 简写方法一: 计算属性会监测内部数据变化,如果数据发生变化,则会重新执行
       tuiChannels(){
           // filter数组方法：遍历数组,把符合条件的元素存储到新数组中并返回
@@ -89,8 +92,23 @@ export default {
           })
       },
       // 添加频道：从频道推荐中,添加至我的频道中
-      onAddChannel(channel) {
+    async onAddChannel(channel) {
           this.channelsEdit.push(channel)
+          // 数据持久化处理
+          if(this.user){
+              try {
+                // 已登录,把数据请求接口放到线上
+               await addUserChannel({
+                   id: channel.id,  // 频道ID
+                   seq: this.channelsEdit.length  // 序号
+                })     
+              } catch (err) {
+                  this.$toast('保存失败，请稍后重试！')
+              }              
+          } else {
+              // 未登录,把数据存储到本地
+              setItem('TOUTIAO_CHANNELS', this.channelsEdit)
+          }
       },
       // 切换频道同步至首页
       onMyChannelClick (channels,index) {
@@ -106,10 +124,25 @@ export default {
               if(index <= this.activeId) {
                   // 让激活频道的索引-1 。将true传递给父组件onUpdateActive()方法,表示不关闭频道弹窗
                   this.$emit('update-active', this.activeId -1, true)
-              }                          
+              }     
+              // 4、处理持久化
+              this.deleteChannel(channels)                     
           } else {
               // 非编辑状态,执行切换频道，子组件将index索引传递给父组件onUpdateActive()方法。将false传递给父组件,表示关闭频道弹窗
               this.$emit('update-active', index, false)
+          }
+      },
+     async deleteChannel (channels) {
+          try {
+                if(this.user) {
+                // 已登录,则将数据更新到线上
+                    await deleteUserChannel(channels.id)
+                } else {
+                    // 未登录,将数据更新到本地
+                    setItem('TOUTIAO_CHANNELS', this.channelsEdit)
+                }
+          } catch(err) {
+              this.$toast('更新数据失败,请稍后再试')
           }
       }      
   },
