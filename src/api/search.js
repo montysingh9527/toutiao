@@ -13,3 +13,12 @@
      }
    })
  }
+
+// 请求获取搜索结果
+export const getSearchRearch = params => {
+  return request({
+    method: 'GET',
+    url: '/v1_0/search',
+    params
+  })
+}

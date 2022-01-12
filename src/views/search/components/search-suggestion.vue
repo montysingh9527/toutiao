@@ -1,7 +1,7 @@
 <template>
     <!-- 联想建议 -->
   <div class="search-suggestion">
-      <van-cell icon="search" v-for="(item, index) in suggestions" :key="index">
+      <van-cell @click="$emit('search', item)" icon="search" v-for="(item, index) in suggestions" :key="index">
         <div slot="title" v-html="highlight(item)"></div>  
       </van-cell>
       <!-- 双花括号绑定会直接输出纯文本内容 -->
@@ -53,7 +53,7 @@ export default {
       },
       highlight(item) {
           const highlightStr = `<span class="active">${ this.searchText }</span>`
-
+            
           // 正则表达式中间的内容都会当做匹配字符来使用,而不是数据变量
           // 如果需要根据数据变量动态创建正则表达式,则手动 new RegExp
         //   RegExp 正则表达式构造函数：参数1:匹配模式字符串,它会根据这个字符串创建正则对象。参数2:匹配模式,要写到字符串中
