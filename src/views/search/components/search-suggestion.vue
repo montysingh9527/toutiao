@@ -1,7 +1,14 @@
 <template>
     <!-- 联想建议 -->
   <div class="search-suggestion">
-      <van-cell icon="search" v-for="(item, index) in suggestions" :key="index" :title="item"></van-cell>
+      <van-cell icon="search" v-for="(item, index) in suggestions" :key="index">
+        <div slot="title" v-html="highlight(item)"></div>  
+      </van-cell>
+      <!-- 双花括号绑定会直接输出纯文本内容 -->
+      <!-- <div>{{ htmlStr }}</div> -->
+
+      <!-- 使用v-html指令可以绑定渲染带有html标签的字符串 -->
+      <!-- <div v-html="htmlStr"></div> -->
   </div>
 </template>
 
@@ -19,7 +26,8 @@ export default {
   },
   data() {
     return {
-        suggestions: []   // 联想建议数据列表
+        suggestions: [],   // 联想建议数据列表
+        htmlStr: 'Hello <span style="color: red">World</span>'
     };
   },
   computed: {},
@@ -42,10 +50,24 @@ export default {
           this.suggestions = res.data.data.options
           console.log('res',res.data.data.options)
       })
+      },
+      highlight(item) {
+          const highlightStr = `<span class="active">${ this.searchText }</span>`
+
+          // 正则表达式中间的内容都会当做匹配字符来使用,而不是数据变量
+          // 如果需要根据数据变量动态创建正则表达式,则手动 new RegExp
+        //   RegExp 正则表达式构造函数：参数1:匹配模式字符串,它会根据这个字符串创建正则对象。参数2:匹配模式,要写到字符串中
+          const reg = new RegExp(this.searchText, 'gi')          
+          return item.replace(reg, highlightStr)  // replace不会修改原始字符串,而是返回一个新的字符串
       }      
   },
 };
 </script>
 
 <style scoped lang="less">
+.search-suggestion {
+    /deep/ span.active {
+        color: rgb(189, 6, 6);
+    }
+}
 </style>
