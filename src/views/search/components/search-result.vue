@@ -32,7 +32,7 @@ export default {
         finished: false,   // 控制数据加载结束的状态
         page: 1,           // 页码
         per_page: 15,     // 每页数量
-        error: false    // 展示加载失败的状态
+        error: false,    // 展示加载失败的状态
     };
   },
   computed: {},

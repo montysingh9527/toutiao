@@ -6,7 +6,7 @@
           <span>完成</span>
           <van-icon name="delete-o" />          
       </van-cell>
-      <van-cell title="单元格" value="内容">
+      <van-cell v-for="(item, index) in searchHistories" :key="index" :title="item">
           <van-icon name="close" />
       </van-cell>
   </div>
@@ -16,7 +16,12 @@
 export default {
   name: 'SearchHistory',
   components: {},
-  props: {},
+  props: {
+    searchHistories: {
+      type: Array,
+      required: true
+    }
+  },
   data() {
     return {};
   },

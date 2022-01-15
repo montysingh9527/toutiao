@@ -21,7 +21,7 @@
     <!-- 联想建议 End -->
 
     <!-- 搜索历史记录 Start -->
-    <search-history v-else />
+    <search-history v-else :search-histories="searchHistories" />
     <!-- 搜索历史记录 End -->
 
   </div>
@@ -42,7 +42,8 @@ export default {
   data() {
     return {
         searchText:'',   // 搜索文字
-        isResultShow: false    // 控制搜索结果的展示
+        isResultShow: false,    // 控制搜索结果的展示
+        searchHistories: []    // 搜索的历史记录数据
     };
   },
   computed: {},
@@ -50,9 +51,16 @@ export default {
   created() {},
   methods: {
     onSearch(val) {
-        this.searchText = val
-        this.isResultShow = true  // 展示搜索结果
-      console.log(val);
+      this.searchText = val  // 更新文本框内容
+       console.log('val',val);
+      // 存储搜索历史记录。要求:不要有重复历史记录、最新的排在最前面
+      const index = this.searchHistories.indexOf(val)
+      if (index !== -1) {
+        this.searchHistories.splice(index, 1)
+      }
+      this.searchHistories.unshift(val)
+      this.isResultShow = true  // 展示搜索结果
+     
     },
     onCancel() {
       this.$router.back()
