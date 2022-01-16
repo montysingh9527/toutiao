@@ -43,13 +43,14 @@ export default {
     return {
         searchText:'',   // 搜索文字
         isResultShow: false,    // 控制搜索结果的展示
-        searchHistories: []    // 搜索的历史记录数据
+        searchHistories: [] // 搜索的历史记录数据
     };
   },
   computed: {},
   watch: {},
   created() {},
   methods: {
+    // 执行搜索
     onSearch(val) {
       this.searchText = val  // 更新文本框内容
        console.log('val',val);
