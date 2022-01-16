@@ -7,13 +7,13 @@
 
     <div class="main-wrap">
       <!-- 加载中 -->
-      <div class="loading-wrap">
+      <div v-if="loading" class="loading-wrap">
         <van-loading color="#3296fa" vertical>加载中...</van-loading>
       </div>
       <!-- /加载中 -->
 
       <!-- 加载完成-文章详情 -->
-      <div class="article-detail">
+      <div v-else-if="articles.title" class="article-detail">
         <!-- 文章标题 -->
         <h1 class="article-title">{{ articles.title }}</h1>
         <!-- /文章标题 -->
@@ -35,17 +35,17 @@
       <!-- /加载完成-文章详情 -->
 
       <!-- 加载失败：404 -->
-      <div class="error-wrap">
+      <div v-else-if="errStatus === 404" class="error-wrap">
         <van-icon name="failure" />
         <p class="text">该资源不存在或已删除！</p>
       </div>
       <!-- /加载失败：404 -->
 
       <!-- 加载失败：其它未知错误（例如网络原因或服务端异常） -->
-      <div class="error-wrap">
+      <div v-else class="error-wrap">
         <van-icon name="failure" />
         <p class="text">内容加载失败！</p>
-        <van-button class="retry-btn">点击重试</van-button>
+        <van-button @click="_getArticleById" class="retry-btn">点击重试</van-button>
       </div>
       <!-- /加载失败：其它未知错误（例如网络原因或服务端异常） -->
     </div>
@@ -76,6 +76,8 @@ export default {
   data() {
     return {
       articles:{},  // 文章详情数据
+      loading: true, // 加载中的loading状态
+      errStatus: 0,   // 失败的状态码
     };
   },
   computed: {},
@@ -86,9 +88,18 @@ export default {
   methods: {
     // 获取文章详情数据
     _getArticleById(){
+      this.loading = true  // 发起请求前使用loading加载中
       getArticleById(this.articleId).then(res=>{
        this.articles = res.data.data
         console.log('文章详情=>',res.data.data)
+      }).catch(err=>{        
+        if (err.response && err.response.status === 404){
+          this.errStatus = 404
+        }
+        this.$toast(`${err.response.data.message}`)
+        console.log('文章详情err',err.response)
+      }).finally(()=> {
+        this.loading = false   // 无论成功还是失败都关闭loading
       })
     }
   },
