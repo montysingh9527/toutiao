@@ -31,6 +31,7 @@
 import SearchHistory from './components/search-history'
 import SearchSuggestion from './components/search-suggestion'
 import SearchResult from './components/search-result'
+import { setItem, getItem} from '@/utils/storage' 
 export default {
   name: 'SearchPage',
   components: {
@@ -43,11 +44,16 @@ export default {
     return {
         searchText:'',   // 搜索文字
         isResultShow: false,    // 控制搜索结果的展示
-        searchHistories: [] // 搜索的历史记录数据
+        searchHistories: getItem('SEARCH_HISTORY') || [] // 搜索的历史记录数据,如果本地存储有就用,反之为空数组
     };
   },
   computed: {},
-  watch: {},
+  watch: {
+    // 监听搜索历史记录数据变化，将数据存储到本地
+    searchHistories(value) {
+      setItem('SEARCH_HISTORY', value)
+    }
+  },
   created() {},
   methods: {
     // 执行搜索
