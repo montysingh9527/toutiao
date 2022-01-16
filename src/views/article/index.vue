@@ -15,21 +15,21 @@
       <!-- 加载完成-文章详情 -->
       <div class="article-detail">
         <!-- 文章标题 -->
-        <h1 class="article-title">这是文章标题</h1>
+        <h1 class="article-title">{{ articles.title }}</h1>
         <!-- /文章标题 -->
 
         <!-- 用户信息 -->
         <van-cell class="user-info" center :border="false">
-          <van-image class="avatar" src="https://img.yzcdn.cn/vant/cat.jpeg" slot="icon" fit="cover" round />
-          <div slot="title" class="user-name">头条号</div>
-          <div slot="label" class="publish-date">14小时前</div>
+          <van-image class="avatar" :src="articles.aut_photo" slot="icon" fit="cover" round />
+          <div slot="title" class="user-name">{{ articles.aut_name }}</div>
+          <div slot="label" class="publish-date">{{articles.pubdate | formDate }}</div>
           <van-button class="follow-btn" type="info" color="#3296fa" size="small" icon="plus" round>关注</van-button>
           <!-- <van-button class="follow-btn" round size="small">已关注</van-button> -->
         </van-cell>
         <!-- /用户信息 -->
 
         <!-- 文章内容 -->
-        <div class="article-content">这是文章内容</div>
+        <div class="article-content" v-html="articles.content"></div>
         <van-divider>正文结束</van-divider>
       </div>
       <!-- /加载完成-文章详情 -->
@@ -53,7 +53,7 @@
     <!-- 底部区域 -->
     <div class="article-bottom">
       <van-button class="comment-btn" type="default" size="small" round>写评论</van-button>
-      <van-icon name="comment-o" info="123" color="#777" />
+      <van-icon name="comment-o" :info="articles.read_count" color="#777" />
       <van-icon color="#777" name="star-o" />
       <van-icon color="#777" name="good-job-o" />
       <van-icon name="share" color="#777777"></van-icon>
@@ -63,6 +63,7 @@
 </template>
 
 <script>
+import { getArticleById } from '@/api/article'
 export default {
   name: 'articleIndex',
   components: {},
@@ -73,12 +74,24 @@ export default {
     }
   },
   data() {
-    return {};
+    return {
+      articles:{},  // 文章详情数据
+    };
   },
   computed: {},
   watch: {},
-  created() {},
-  methods: {},
+  created() {
+    this._getArticleById()
+  },
+  methods: {
+    // 获取文章详情数据
+    _getArticleById(){
+      getArticleById(this.articleId).then(res=>{
+       this.articles = res.data.data
+        console.log('文章详情=>',res.data.data)
+      })
+    }
+  },
 };
 </script>
 
