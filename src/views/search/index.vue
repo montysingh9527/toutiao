@@ -21,7 +21,7 @@
     <!-- 联想建议 End -->
 
     <!-- 搜索历史记录 Start -->
-    <search-history v-else :search-histories="searchHistories" />
+    <search-history v-else :search-histories="searchHistories" @search="onSearch" @deleteAllText="searchHistories = []" />
     <!-- 搜索历史记录 End -->
 
   </div>

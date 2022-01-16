@@ -27,7 +27,7 @@ export default {
   data() {
     return {
         suggestions: [],   // 联想建议数据列表
-        htmlStr: 'Hello <span style="color: red">World</span>'
+        // htmlStr: 'Hello <span style="color: red">World</span>'
     };
   },
   computed: {},
