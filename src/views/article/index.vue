@@ -28,8 +28,8 @@
         </van-cell>
         <!-- /用户信息 -->
 
-        <!-- 文章内容 -->
-        <div class="article-content" v-html="articles.content"></div>
+        <!-- 文章内容 引入github-markdown的样式markdown-body-->
+        <div class="article-content markdown-body" v-html="articles.content"></div>
         <van-divider>正文结束</van-divider>
       </div>
       <!-- /加载完成-文章详情 -->
@@ -107,6 +107,7 @@ export default {
 </script>
 
 <style scoped lang="less">
+@import '../../styles/github-markdown.css';
 .article-container {
   .main-wrap {
     position: fixed;
