@@ -28,8 +28,8 @@
         </van-cell>
         <!-- /用户信息 -->
 
-        <!-- 文章内容 引入github-markdown的样式markdown-body-->
-        <div class="article-content markdown-body" v-html="articles.content"></div>
+        <!-- 文章内容 引入github-markdown的样式markdown-body  ref用于获取img节点-->
+        <div ref="article-content" class="article-content markdown-body" v-html="articles.content"></div>
         <van-divider>正文结束</van-divider>
       </div>
       <!-- /加载完成-文章详情 -->
@@ -64,6 +64,7 @@
 
 <script>
 import { getArticleById } from '@/api/article'
+import { ImagePreview } from 'vant';   // ImagePreview 图片预览组件
 export default {
   name: 'articleIndex',
   components: {},
@@ -91,6 +92,12 @@ export default {
       this.loading = true  // 发起请求前使用loading加载中
       getArticleById(this.articleId).then(res=>{
        this.articles = res.data.data
+       // 初始化图片点击预览。数据驱动视图不是立即的
+       setTimeout(()=>{
+        // console.log(this.$refs['article-content']) 
+        // 图片预览
+        this.previewImage()
+       }, 0)
         console.log('文章详情=>',res.data.data)
       }).catch(err=>{        
         if (err.response && err.response.status === 404){
@@ -101,6 +108,24 @@ export default {
       }).finally(()=> {
         this.loading = false   // 无论成功还是失败都关闭loading
       })
+    },
+    // 图片预览
+    previewImage(){
+      // 得到所有的img节点
+      const articleContent = this.$refs['article-content']
+      const img = articleContent.querySelectorAll('img')
+      let imgs = []  // 所有img地址
+      img.forEach((img,index) => {
+        console.log('img',img.src)
+        imgs.push(img.src)
+        // 给每个img注册点击事件,在处理函数中调用预览
+        img.onclick = ()=>{
+          ImagePreview({        // ImagePreview 图片预览组件 
+          images: imgs, // 预览的图片地址数组
+          startPosition: index, // 开始位置,从0开始
+        });
+        }
+      });
     }
   },
 };
