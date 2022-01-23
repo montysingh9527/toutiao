@@ -23,8 +23,20 @@
           <van-image class="avatar" :src="articles.aut_photo" slot="icon" fit="cover" round />
           <div slot="title" class="user-name">{{ articles.aut_name }}</div>
           <div slot="label" class="publish-date">{{articles.pubdate | formDate }}</div>
-          <van-button class="follow-btn" type="info" color="#3296fa" size="small" icon="plus" round>关注</van-button>
-          <!-- <van-button class="follow-btn" round size="small">已关注</van-button> -->
+          <!-- <van-button @click="onFollow" v-if="articles.is_followed" class="follow-btn" round size="small">已关注</van-button>
+          <van-button @click="onFollow" v-else class="follow-btn" type="info" color="#3296fa" size="small" icon="plus" round>关注</van-button>
+          -->
+          <!-- 关注组件：模板中的$event是事件参数；@update-is-followed更新状态
+          当我们传递给子组件的数据既要使用还要修改。
+            传递：props  :is-followed="articles.is_followed"
+            修改：自定义事件   @update-is-followed="articles.is_followed = $event"
+            可以简写方式：在组件上使用v-model
+                value="articles.isfollowed"
+                @input="articles.is_followed = $event"
+                如果需要修改v-model的规则名称,可以通过子组件的model属性来配置修改
+              一个组件上只能使用一次v-model,如果有多个数据需要实现类似于v-model的效果，可以使用属性 .sync修饰符
+          -->
+          <follow-user class="follow-btn" v-model="articles.isfollowed" :user-id="articles.aut_id" />
         </van-cell>
         <!-- /用户信息 -->
 
@@ -65,9 +77,12 @@
 <script>
 import { getArticleById } from '@/api/article'
 import { ImagePreview } from 'vant';   // ImagePreview 图片预览组件
+import FollowUser from '@/components/follow-user'
 export default {
   name: 'articleIndex',
-  components: {},
+  components: {
+    FollowUser
+  },
   props: {
     articleId: {
       type: [Number, String],
@@ -126,7 +141,7 @@ export default {
         });
         }
       });
-    }
+    },
   },
 };
 </script>
