@@ -31,18 +31,29 @@
             传递：props  :is-followed="articles.is_followed"
             修改：自定义事件   @update-is-followed="articles.is_followed = $event"
             可以简写方式：在组件上使用v-model
-                value="articles.isfollowed"
+                value="articles.is_followed"
                 @input="articles.is_followed = $event"
                 如果需要修改v-model的规则名称,可以通过子组件的model属性来配置修改
               一个组件上只能使用一次v-model,如果有多个数据需要实现类似于v-model的效果，可以使用属性 .sync修饰符
           -->
-          <follow-user class="follow-btn" v-model="articles.isfollowed" :user-id="articles.aut_id" />
+          <follow-user class="follow-btn" v-model="articles.is_followed" :user-id="articles.aut_id" />
         </van-cell>
         <!-- /用户信息 -->
 
         <!-- 文章内容 引入github-markdown的样式markdown-body  ref用于获取img节点-->
         <div ref="article-content" class="article-content markdown-body" v-html="articles.content"></div>
         <van-divider>正文结束</van-divider>
+        <!-- 底部区域 -->
+        <div class="article-bottom">
+          <van-button class="comment-btn" type="default" size="small" round>写评论</van-button>
+          <van-icon name="comment-o" :info="articles.read_count" color="#777" />
+          <!-- <van-icon color="#777" name="star-o" /> -->
+          <!-- 收藏组件 -->
+          <collect-article :class="{ collected : articles.is_collected }" v-model="articles.is_collected" :art-id="articles.art_id"/>
+          <van-icon color="#777" name="good-job-o" />
+          <van-icon name="share" color="#777777"></van-icon>
+        </div>
+        <!-- /底部区域 -->
       </div>
       <!-- /加载完成-文章详情 -->
 
@@ -62,15 +73,7 @@
       <!-- /加载失败：其它未知错误（例如网络原因或服务端异常） -->
     </div>
 
-    <!-- 底部区域 -->
-    <div class="article-bottom">
-      <van-button class="comment-btn" type="default" size="small" round>写评论</van-button>
-      <van-icon name="comment-o" :info="articles.read_count" color="#777" />
-      <van-icon color="#777" name="star-o" />
-      <van-icon color="#777" name="good-job-o" />
-      <van-icon name="share" color="#777777"></van-icon>
-    </div>
-    <!-- /底部区域 -->
+    
   </div>
 </template>
 
@@ -78,10 +81,12 @@
 import { getArticleById } from '@/api/article'
 import { ImagePreview } from 'vant';   // ImagePreview 图片预览组件
 import FollowUser from '@/components/follow-user'
+import CollectArticle from '@/components/collect-article'
 export default {
   name: 'articleIndex',
   components: {
-    FollowUser
+    FollowUser,
+    CollectArticle
   },
   props: {
     articleId: {
@@ -244,6 +249,10 @@ export default {
     height: 88px;
     border-top: 1px solid #d8d8d8;
     background-color: #fff;
+    // 收藏后按钮颜色
+    .collected {
+      color: #ffa500;
+    }
     .comment-btn {
       width: 282px;
       height: 46px;
