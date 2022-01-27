@@ -50,7 +50,9 @@
           <!-- <van-icon color="#777" name="star-o" /> -->
           <!-- 收藏组件 -->
           <collect-article :class="{ collected : articles.is_collected }" v-model="articles.is_collected" :art-id="articles.art_id"/>
-          <van-icon color="#777" name="good-job-o" />
+          <!-- 点赞组件 art-id文章id-->
+          <like-article :class="{ liked : articles.attitude === 1 }" v-model="articles.attitude" :art-id="articles.art_id" />
+          <!-- <van-icon color="#777" name="good-job-o" /> -->
           <van-icon name="share" color="#777777"></van-icon>
         </div>
         <!-- /底部区域 -->
@@ -82,11 +84,13 @@ import { getArticleById } from '@/api/article'
 import { ImagePreview } from 'vant';   // ImagePreview 图片预览组件
 import FollowUser from '@/components/follow-user'
 import CollectArticle from '@/components/collect-article'
+import LikeArticle from '@/components/like-article'
 export default {
   name: 'articleIndex',
   components: {
     FollowUser,
-    CollectArticle
+    CollectArticle,
+    LikeArticle
   },
   props: {
     articleId: {
@@ -251,6 +255,9 @@ export default {
     background-color: #fff;
     // 收藏后按钮颜色
     .collected {
+      color: #ffa500;
+    }
+    .liked {
       color: #ffa500;
     }
     .comment-btn {

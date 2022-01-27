@@ -94,3 +94,25 @@ export const login = data => {
   })
 }
 
+/**
+ * 文章详情—用户点赞文章
+ */
+ export const addLike = target => {
+  return request({
+    method: 'POST',
+    url: '/v1_0/article/likings',
+    data: {
+      target
+    }
+  })
+}
+
+/**
+ * 文章详情—用户取消点赞文章
+ */
+ export const deleteLike = target => {
+  return request({
+    method: 'DELETE',
+    url: `/v1_0/article/likings/${target}`,
+  })
+}
