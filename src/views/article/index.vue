@@ -43,14 +43,14 @@
         <!-- 文章内容 引入github-markdown的样式markdown-body  ref用于获取img节点-->
         <div ref="article-content" class="article-content markdown-body" v-html="articles.content"></div>
         <van-divider>正文结束</van-divider>
-        
+
         <!-- 文章评论列表组件 -->
-        <comment-list :artId="articles.art_id" />
+        <comment-list :artId="articles.art_id" @onload-success="totalCommentCount = $event.total_count"/>
 
         <!-- 底部区域 -->
         <div class="article-bottom">
           <van-button class="comment-btn" type="default" size="small" round>写评论</van-button>
-          <van-icon name="comment-o" :info="articles.read_count" color="#777" />
+          <van-icon name="comment-o" :info="totalCommentCount" color="#777" />
           <!-- <van-icon color="#777" name="star-o" /> -->
           <!-- 收藏组件 -->
           <collect-article :class="{ collected : articles.is_collected }" v-model="articles.is_collected" :art-id="articles.art_id"/>
@@ -109,6 +109,7 @@ export default {
       articles:{},  // 文章详情数据
       loading: true, // 加载中的loading状态
       errStatus: 0,   // 失败的状态码
+      totalCommentCount: 0,  // 评论总数量
     };
   },
   computed: {},
