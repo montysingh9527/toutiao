@@ -43,6 +43,10 @@
         <!-- 文章内容 引入github-markdown的样式markdown-body  ref用于获取img节点-->
         <div ref="article-content" class="article-content markdown-body" v-html="articles.content"></div>
         <van-divider>正文结束</van-divider>
+        
+        <!-- 文章评论列表组件 -->
+        <comment-list :artId="articles.art_id" />
+
         <!-- 底部区域 -->
         <div class="article-bottom">
           <van-button class="comment-btn" type="default" size="small" round>写评论</van-button>
@@ -85,12 +89,14 @@ import { ImagePreview } from 'vant';   // ImagePreview 图片预览组件
 import FollowUser from '@/components/follow-user'
 import CollectArticle from '@/components/collect-article'
 import LikeArticle from '@/components/like-article'
+import CommentList from './components/comment-list' 
 export default {
   name: 'articleIndex',
   components: {
     FollowUser,
     CollectArticle,
-    LikeArticle
+    LikeArticle,
+    CommentList
   },
   props: {
     articleId: {

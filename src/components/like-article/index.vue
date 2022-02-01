@@ -42,10 +42,13 @@ export default {
             this.$emit('input', attitudeStatus)
             this.$toast.success(attitudeStatus === 1 ? '点赞成功' : '已取消点赞')
           } catch(err) {
-              if(err.response === 401){
-                  this.$toast.fail('你还未登录，请登录后重试！')
-              } 
-              this.$toast.fail('操作失败，请重试！')
+            //   console.log(err.response)
+              if(err.response.status === 401){
+                this.$toast.fail('请登录后重试！')
+              } else {
+                this.$toast.fail('操作失败，请重试！')
+              }
+             
           }
       }
   },
