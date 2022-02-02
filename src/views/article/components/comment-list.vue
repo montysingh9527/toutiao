@@ -9,16 +9,20 @@
         :error.sync="error"
         error-text="请求失败，点击重新加载"
         >
-        <van-cell v-for="(item, index) in list" :key="index" :title="item.content" />
+        <!--文章评论列表组件     -->
+        <comment-item v-for="(item, index) in list" :key="index" :comments="item" />
     </van-list>
   </div>
 </template>
 
 <script>
 import { getComments } from '@/api/comment'
+import CommentItem from './comment-item'
 export default {
   name: "CommentList",
-  components: {},
+  components: {
+      CommentItem
+  },
   props: {
       artId: {
           type: [Number, String],
