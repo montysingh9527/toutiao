@@ -10,6 +10,7 @@
     />
     <div slot="title" class="title-wrap">
       <div class="text-height">
+        <van-tag type="primary">{{ commentFloor }}楼</van-tag>
         <div class="user-name">{{ comments.aut_name }}</div>
       </div>
       <van-button
@@ -39,7 +40,12 @@ export default {
       comments: {
           type: Object,
           required: true
-      },      
+      }, 
+      // 楼层显示
+      commentFloor: {
+          type: Number,
+          required: true
+      }     
   },
   data () {
     return {}
