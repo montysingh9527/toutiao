@@ -57,7 +57,7 @@ export default {
         if(results.length) {
           this.page++
         } else{
-          this.finished = false
+          this.finished = true
         }        
         console.log('搜索结果==>',results)
      } catch(err) {

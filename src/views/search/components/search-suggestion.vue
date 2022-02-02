@@ -57,8 +57,14 @@ export default {
           // 正则表达式中间的内容都会当做匹配字符来使用,而不是数据变量
           // 如果需要根据数据变量动态创建正则表达式,则手动 new RegExp
         //   RegExp 正则表达式构造函数：参数1:匹配模式字符串,它会根据这个字符串创建正则对象。参数2:匹配模式,要写到字符串中
-          const reg = new RegExp(this.searchText, 'gi')          
-          return item.replace(reg, highlightStr)  // replace不会修改原始字符串,而是返回一个新的字符串
+          const reg = new RegExp(this.searchText, 'gi')           
+          try{ 
+              if(item){
+                return item.replace(reg, highlightStr)  // replace不会修改原始字符串,而是返回一个新的字符串
+              }
+            }catch(err){
+              console.log('搜索关键词' + err)
+          }         
       }      
   },
 };
