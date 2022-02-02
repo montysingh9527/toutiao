@@ -13,3 +13,26 @@ export const getComments = params => {
         params
     })
 }
+
+/**
+ * 文章详情—用户点赞评论
+ */
+ export const addLiking = target => {
+    return request({
+      method: 'POST',
+      url: '/v1_0/comment/likings',
+      data: {
+        target
+      }
+    })
+  }
+  
+  /**
+   * 文章详情—用户取消点赞评论
+   */
+   export const deleteLiking = target => {
+    return request({
+      method: 'DELETE',
+      url: `/v1_0/article/likings/${target}`,
+    })
+  }

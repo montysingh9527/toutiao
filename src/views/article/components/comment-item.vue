@@ -14,8 +14,9 @@
         <div class="user-name">{{ comments.aut_name }}</div>
       </div>
       <van-button
-        class="like-btn"
-        icon="good-job-o"
+        @click="onLiking(comments)"
+        :class="['like-btn', comments.is_liking ? 'isliking' : '']"
+        :icon="comments.is_liking ? 'good-job' : 'good-job-o'"
       >{{ comments.like_count || '赞' }}</van-button>
     </div>
 
@@ -33,6 +34,7 @@
 </template>
 
 <script>
+import { addLiking, deleteLiking } from '@/api/comment'
 export default {
   name: 'CommentItem',
   components: {},
@@ -54,7 +56,28 @@ export default {
   watch: {},
   created () {},
   mounted () {},
-  methods: {}
+  methods: {
+      // 点赞评论
+     async onLiking(){         
+         try{
+           // 判断是否已点赞评论
+            if(this.comments.is_liking){
+               // 如果已点赞，则取消点赞评论
+                await deleteLiking(this.comments.com_id)
+                this.comments.like_count--
+            } else {
+              // 如果没有点赞，则点赞评论 将comments.is_liking 设置为true
+                await addLiking(this.comments.com_id)
+                this.comments.like_count++
+            }
+            this.comments.is_liking = !this.comments.is_liking
+            // this.comment.like_count += this.comment.is_liking ? 1 : -1
+            // this.$toast.success(this.comment.is_liking ? '点赞成功' : '取消点赞')
+         } catch(err) {
+            this.$toast('点赞失败请重试！')
+         }     
+      }
+  }
 }
 </script>
 
@@ -107,8 +130,11 @@ export default {
     font-size: 19px;
     line-height: 30px;
     margin-right: 7px;
+    &.isliking .van-icon{
+        color: #ffa500;
+    }
     .van-icon {
-      font-size: 30px;
+      font-size: 30px;      
     }
   }
 }
