@@ -44,8 +44,8 @@
         <div ref="article-content" class="article-content markdown-body" v-html="articles.content"></div>
         <van-divider>正文结束</van-divider>
 
-        <!-- 文章评论列表组件 -->
-        <comment-list :list="commentList" :artId="articles.art_id" @onload-success="totalCommentCount = $event.total_count"/>
+        <!-- 文章评论列表组件   reply-click:为孙子组件comment-item传递-->
+        <comment-list :list="commentList" :artId="articles.art_id" @onload-success="totalCommentCount = $event.total_count" @reply-click="onReplyClick" />
 
         <!-- 底部区域 -->
         <div class="article-bottom">
@@ -85,7 +85,11 @@
       <!-- /加载失败：其它未知错误（例如网络原因或服务端异常） -->
     </div>
 
-    
+    <!-- 回复评论 -->
+    <van-popup v-model="isReplyShow" position="bottom" style="height:100%;">
+       回复评论弹窗
+    </van-popup>
+    <!-- /回复评论 -->
   </div>
 </template>
 
@@ -119,7 +123,8 @@ export default {
       errStatus: 0,   // 失败的状态码
       totalCommentCount: 0,  // 评论总数量
       isPostShow: false,   // 文章评论弹窗
-      commentList: []  // 评论列表
+      commentList: [],  // 评论列表
+      isReplyShow: false, // 回复评论弹窗
     };
   },
   computed: {},
@@ -168,11 +173,18 @@ export default {
         }
       });
     },
+    // 发布文章评论
     onPostSuccess(data) {
       // 关闭弹窗
       this.isPostShow = false   
       // 将发布内容显示到列表顶部
       this.commentList.unshift(data.new_obj)
+      
+    },
+    // 回复评论
+    onReplyClick(comments) {
+      // 回复评论弹窗展示
+      this.isReplyShow = true
     }
   },
 };

@@ -30,6 +30,17 @@ export const getComments = params => {
   /**
    * 文章详情—用户发布文章评论
    */
+   export const deleteLiking = target => {
+    return request({
+      method: 'DELETE',
+      url: `/v1_0/article/likings/${target}`,
+      data
+    })
+  }
+
+  /**
+   * 文章详情—用户发布文章评论
+   */
    export const addComment = data => {
     return request({
       method: 'POST',

@@ -10,7 +10,7 @@
         error-text="请求失败，点击重新加载"
         >
         <!--文章评论列表组件   :comment-floor：计算楼层  -->
-        <comment-item v-for="(item, index) in list" :key="index" :comments="item" :comment-floor="list.length - index"/>
+        <comment-item @reply-click="$emit('reply-click', $event)" v-for="(item, index) in list" :key="index" :comments="item" :comment-floor="list.length - index"/>
     </van-list>
   </div>
 </template>
