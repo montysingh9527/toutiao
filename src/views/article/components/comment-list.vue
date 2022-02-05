@@ -27,11 +27,16 @@ export default {
       artId: {
           type: [Number, String],
           required: true
+      },
+      // 文章评论列表
+      list: {
+        type: Array,
+        default: () => []   // 设置默认值
       }
   },
   data() {
     return {
-        list: [],   // 文章评论列表
+        // list: [],   // 文章评论列表
         loading: false,     // loading状态
         finished: false,    // 加载完成状态
         offset: null,  // 获取下一页数据的标记

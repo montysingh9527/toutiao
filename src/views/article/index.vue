@@ -45,11 +45,11 @@
         <van-divider>正文结束</van-divider>
 
         <!-- 文章评论列表组件 -->
-        <comment-list :artId="articles.art_id" @onload-success="totalCommentCount = $event.total_count"/>
+        <comment-list :list="commentList" :artId="articles.art_id" @onload-success="totalCommentCount = $event.total_count"/>
 
         <!-- 底部区域 -->
         <div class="article-bottom">
-          <van-button class="comment-btn" type="default" size="small" round>写评论</van-button>
+          <van-button @click="isPostShow = true" class="comment-btn" type="default" size="small" round>写评论</van-button>
           <van-icon name="comment-o" :info="totalCommentCount" color="#777" />
           <!-- <van-icon color="#777" name="star-o" /> -->
           <!-- 收藏组件 -->
@@ -60,6 +60,12 @@
           <van-icon name="share" color="#777777"></van-icon>
         </div>
         <!-- /底部区域 -->
+
+        <!-- 文章评论 组件 -->
+        <van-popup v-model="isPostShow" position="bottom" >
+          <comment-post :targetId="articles.art_id" @post-success="onPostSuccess" />
+        </van-popup>
+        <!-- /文章评论-->
       </div>
       <!-- /加载完成-文章详情 -->
 
@@ -90,13 +96,15 @@ import FollowUser from '@/components/follow-user'
 import CollectArticle from '@/components/collect-article'
 import LikeArticle from '@/components/like-article'
 import CommentList from './components/comment-list' 
+import CommentPost from './components/comment-post'
 export default {
   name: 'articleIndex',
   components: {
     FollowUser,
     CollectArticle,
     LikeArticle,
-    CommentList
+    CommentList,
+    CommentPost
   },
   props: {
     articleId: {
@@ -110,6 +118,8 @@ export default {
       loading: true, // 加载中的loading状态
       errStatus: 0,   // 失败的状态码
       totalCommentCount: 0,  // 评论总数量
+      isPostShow: false,   // 文章评论弹窗
+      commentList: []  // 评论列表
     };
   },
   computed: {},
@@ -158,6 +168,12 @@ export default {
         }
       });
     },
+    onPostSuccess(data) {
+      // 关闭弹窗
+      this.isPostShow = false   
+      // 将发布内容显示到列表顶部
+      this.commentList.unshift(data.new_obj)
+    }
   },
 };
 </script>
