@@ -1,11 +1,15 @@
 # toutiao头条Vant练习
 
-## Project setup
+## 创建
+```
+vue create toutiao
+```
+## 安装
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### 运行
 ```
 npm run serve
 ```
@@ -105,4 +109,9 @@ List 组件通过 loading 和 finished 两个变量控制加载状态，
   - 在每次请求完毕后，需要手动将 loading 设置为 false，表示本次加载结束
   - 所有数据加载结束，finished 为 true，此时不会触发 load 事件
 
+```
+
+### van-popup 弹出层组件 
+```
+弹出层是懒渲染：只有在第一次展示的时候才会渲染里面的内容,之后它的关闭和显示都是在切换内容的显示和隐藏
 ```

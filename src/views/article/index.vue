@@ -85,9 +85,11 @@
       <!-- /加载失败：其它未知错误（例如网络原因或服务端异常） -->
     </div>
 
-    <!-- 回复评论 -->
+    <!-- 回复评论组件     -->
+    <!-- 弹出层是懒渲染的：只有在第一次展示的时候才会渲染里面的内容,之后它的关闭和显示都是在切换内容的显示和隐藏 -->
     <van-popup v-model="isReplyShow" position="bottom" style="height:100%;">
-       回复评论弹窗
+      <!-- v-if 条件渲染: true 渲染元素节点，false 不渲染 -->
+       <comment-reply v-if="isReplyShow" :comments="currentComment" @close="isReplyShow = false" />
     </van-popup>
     <!-- /回复评论 -->
   </div>
@@ -96,11 +98,12 @@
 <script>
 import { getArticleById } from '@/api/article'
 import { ImagePreview } from 'vant';   // ImagePreview 图片预览组件
-import FollowUser from '@/components/follow-user'
-import CollectArticle from '@/components/collect-article'
-import LikeArticle from '@/components/like-article'
-import CommentList from './components/comment-list' 
-import CommentPost from './components/comment-post'
+import FollowUser from '@/components/follow-user'         // 关注作者组件
+import CollectArticle from '@/components/collect-article'  // 文章收藏组件
+import LikeArticle from '@/components/like-article'      // 文章点赞组件
+import CommentList from './components/comment-list'      // 文章评论列表组件
+import CommentPost from './components/comment-post'      // 文章评论组件
+import CommentReply from './components/comment-reply'    // 评论回复组件
 export default {
   name: 'articleIndex',
   components: {
@@ -108,7 +111,8 @@ export default {
     CollectArticle,
     LikeArticle,
     CommentList,
-    CommentPost
+    CommentPost,
+    CommentReply
   },
   props: {
     articleId: {
@@ -125,6 +129,7 @@ export default {
       isPostShow: false,   // 文章评论弹窗
       commentList: [],  // 评论列表
       isReplyShow: false, // 回复评论弹窗
+      currentComment: {},  // 当前点击回复的评论项
     };
   },
   computed: {},
@@ -183,6 +188,7 @@ export default {
     },
     // 回复评论
     onReplyClick(comments) {
+      this.currentComment = comments
       // 回复评论弹窗展示
       this.isReplyShow = true
     }

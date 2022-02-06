@@ -1,5 +1,6 @@
 <template>
   <!-- 文章评论列表 -->
+  <!-- 是否在初始化时立即执行滚动位置检查	:immediate-check -->
   <div class="comment-list">
       <van-list
         v-model="loading"
@@ -8,9 +9,10 @@
         @load="onLoad"
         :error.sync="error"
         error-text="请求失败，点击重新加载"
+        :immediate-check="false"
         >
-        <!--文章评论列表组件   :comment-floor：计算楼层  -->
-        <comment-item @reply-click="$emit('reply-click', $event)" v-for="(item, index) in list" :key="index" :comments="item" :comment-floor="list.length - index"/>
+        <!--文章评论列表组件 types:评论类型'a'/'b'   :comment-floor：计算楼层  -->
+        <comment-item :types="types" @reply-click="$emit('reply-click', $event)" v-for="(item, index) in list" :key="index" :comments="item" :comment-floor="list.length - index"/>
     </van-list>
   </div>
 </template>
@@ -32,6 +34,15 @@ export default {
       list: {
         type: Array,
         default: () => []   // 设置默认值
+      },
+      // 评论类型，a-对文章(article)的评论，c-对评论(comment)的回复
+      types: {
+        type: String,
+        default: 'a',  // 默认为a
+        // 自定义验证函数
+        validator(value) {
+          return ['a', 'c'].includes(value) // 这个值必须匹配下列字符串中的一个
+        }
       }
   },
   data() {
@@ -47,6 +58,8 @@ export default {
   computed: {},
   watch: {},
   created() {
+      // 当你收到初始化onLoad是,它不会自动开始初始的loading。所以要手动开启初始loading
+      this.loading = true
       this.onLoad()
   },
   methods: {
@@ -54,7 +67,7 @@ export default {
       try {
         // 1、请求获取文章评论数据
         const { data } = await getComments({
-            type: 'a',      // 评论类型，a-对文章(article)的评论，c-对评论(comment)的回复
+            type: this.types,      // 评论类型，a-对文章(article)的评论，c-对评论(comment)的回复
             source: this.artId ,        // 源id，文章id或评论id
             offset: this.offset ,        // 获取评论数据的偏移量，值为评论id，表示从此id的数据向后取，不传表示从第一页开始读取数据
             limit: this.limit	// 获取的评论数据个数，不传表示采用后端服务设定的默认每页数据量

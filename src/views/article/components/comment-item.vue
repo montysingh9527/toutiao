@@ -10,7 +10,8 @@
     />
     <div slot="title" class="title-wrap">
       <div class="text-height">
-        <van-tag type="primary">{{ commentFloor }}楼</van-tag>
+        <!-- types 评论类型：文章评论则展示楼层 -->
+        <van-tag type="primary" v-if="this.types=='a'">{{ commentFloor }}楼</van-tag>
         <div class="user-name">{{ comments.aut_name }}</div>
       </div>
       <van-button
@@ -47,7 +48,12 @@ export default {
       // 楼层显示
       commentFloor: {
           type: Number,
-          required: true
+          required: false
+      },
+      // 评论类型：a-对文章(article)的评论，c-对评论(comment)的回复
+      types: {
+        type: String,
+        required: false
       }     
   },
   data () {
