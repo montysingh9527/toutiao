@@ -114,6 +114,12 @@ export default {
     CommentPost,
     CommentReply
   },
+  // 给所有的后代组件提供数据。注意：不要滥用
+  provide: function() {
+    return {
+      articleId: this.articleId
+    }
+  },
   props: {
     articleId: {
       type: [Number, String],
@@ -184,7 +190,8 @@ export default {
       this.isPostShow = false   
       // 将发布内容显示到列表顶部
       this.commentList.unshift(data.new_obj)
-      
+      // 更新评论总数
+      this.totalCommentCount = this.commentList.length
     },
     // 回复评论
     onReplyClick(comments) {
