@@ -12,7 +12,7 @@
       <div class="base-info">
         <div class="left">
             <van-image class="avatar" :src="userInfo.photo" fit="cover" round />
-            <span class="name">今日头条号</span>
+            <span class="name">{{ userInfo.name }}</span>
         </div>
         <div class="right">
           <van-button size="mini" round to="/user/profile">编辑资料</van-button>
