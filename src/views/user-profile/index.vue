@@ -11,7 +11,7 @@
       </van-cell>
       <van-cell @click="isUpdateNameShow = true" title="昵称" :value="user.name" is-link/>
       <van-cell @click="isUpdateGenderShow = true" title="性别" :value="user.gender === 0 ? '男':'女' " is-link/>
-      <van-cell title="生日" :value="user.birthday" is-link/>
+      <van-cell @click="isBirthdayShow = true" title="生日" :value="user.birthday" is-link/>
     </div>
     <!-- 个人信息END -->
     <!-- 编辑昵称弹窗 Start -->
@@ -25,6 +25,12 @@
       <update-gender v-if="isUpdateGenderShow" @close="isUpdateGenderShow = false" v-model="user.gender" />
     </van-popup>
     <!-- 编辑性别弹窗 END -->
+
+    <!-- 编辑生日弹窗 Start -->
+    <van-popup v-model="isBirthdayShow" position="bottom">
+      <update-birthday v-if="isBirthdayShow" @close="isBirthdayShow = false" v-model="user.birthday" />
+    </van-popup>
+    <!-- 编辑生日弹窗 END -->
   </div>
 </template>
 
@@ -32,11 +38,13 @@
 import { getUserProfile } from '@/api/user'
 import UpdateName from './components/update-name'   // 编辑昵称组件
 import UpdateGender from './components/update-gender'   // 编辑性别组件
+import UpdateBirthday from './components/update-birthday'    // 编辑生日组件
 export default {
   name: 'UserProfile',
   components: {
     UpdateName,
-    UpdateGender
+    UpdateGender,
+    UpdateBirthday
   },
   props: {},
   data() {
@@ -46,6 +54,7 @@ export default {
       },
       isUpdateNameShow: false,  // 控制昵称弹窗
       isUpdateGenderShow: false,   // 控制编辑性别弹窗
+      isBirthdayShow: false,       // 控制编辑生日弹窗
     };
   },
   computed: {},

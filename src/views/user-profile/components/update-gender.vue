@@ -1,5 +1,5 @@
 <template>
-    <!-- 编辑昵称组件 -->
+    <!-- 编辑性别组件 -->
   <div class="update-gender">
         <!-- 选择框   默认选中值:default-index -->
       <van-picker title="性别" show-toolbar :columns="columns" :default-index="value"
