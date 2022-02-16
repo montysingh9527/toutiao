@@ -48,6 +48,12 @@ const routes = [
     component: () => import('@/views/article'),
     props: true  // 开启Props传参, 把路由参数映射到组件的props数据中
   },
+  {
+    // 我的-用户资料
+    path: '/user/profile',
+    name: 'user-profile',
+    component: () => import('@/views/user-profile'),
+  }
 ]
 
 const router = new VueRouter({

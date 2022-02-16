@@ -2,7 +2,9 @@
     <!-- 首页文章列表-帖子详情页 -->
   <div class="article-container">
     <!-- 导航栏 -->
-    <van-nav-bar class="page-nav-bar" left-arrow title="头条"></van-nav-bar>
+    <van-nav-bar class="page-nav-bar" title="头条">
+      <van-icon slot="left" name="arrow-left"  @click="$router.back()"/>
+    </van-nav-bar>
     <!-- /导航栏 -->
 
     <div class="main-wrap">

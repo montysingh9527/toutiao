@@ -116,3 +116,13 @@ export const login = data => {
     url: `/v1_0/article/likings/${target}`,
   })
 }
+
+/**
+ * 我的-个人用户资料
+ */
+ export const getUserProfile = () => {
+  return request({
+    method: 'GET',
+    url: '/v1_0/user/profile',
+  })
+}
