@@ -37,7 +37,7 @@
 
     <!-- 编辑头像弹窗 Start -->
     <van-popup v-model="isPhotoShow" position="bottom" style="height: 100%">
-      <update-photo :img="img" @close="isPhotoShow = false" />
+      <update-photo v-if="isPhotoShow" :img="img" @close="isPhotoShow = false" />
     </van-popup>
     <!-- 编辑头像弹窗 END -->
   </div>
